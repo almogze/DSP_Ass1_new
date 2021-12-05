@@ -69,13 +69,17 @@ public class Worker {
         int ind = line.indexOf("\t");
         String command = line.substring(0, ind);
         String inPath = line.substring(ind+1);
-        String downloadedFile = DownloadFile(inPath);
+
+        String[] splitted = inPath.split("/");
+        String pdf_name = splitted[splitted.length-1];
+
+        String downloadedFile = DownloadFile(inPath, pdf_name);
 
         switch (command) {
             case "ToImage":
                 // (try) generating an image from the first page of a pdf.
                 try {
-                    outputPath = "src/output/";
+                    outputPath = pdf_name;
                     generateImageFromPDF(downloadedFile, outputPath, "jpg");
                 } catch (IOException e) {
                     System.out.println("Problem during transforming to an image.");
@@ -87,7 +91,7 @@ public class Worker {
             case "ToHTML":
                 // (try) generating an html page from the first page of a pdf.
                 try {
-                    outputPath = "src/output/html1OfPdf.html";
+                    outputPath = pdf_name;
                     generateHTMLFromPDF(downloadedFile, outputPath);
                 } catch (IOException e) {
                     System.out.println("Problem with generating html.");
@@ -98,7 +102,7 @@ public class Worker {
             case "ToText":
                 // (try) generating a .text file from the first page of a pdf.
                 try {
-                    outputPath = "src/output/pdf_as_text.txt";
+                    outputPath = pdf_name;
                     generateTextFromPDF(downloadedFile, outputPath);
                 } catch (IOException e) {
                     System.out.println("Problem generating text file. Couldn't extract text.");
@@ -114,8 +118,8 @@ public class Worker {
         return outputPath;
     }
 
-    private static String DownloadFile(String filePath){
-        String outPath = "src/output/some.pdf";
+    private static String DownloadFile(String filePath, String pdfName){
+        String outPath = pdfName + ".pdf";
 
         System.out.println(filePath);
 
@@ -141,6 +145,7 @@ public class Worker {
 
 
     private static void generateImageFromPDF(String inputPath, String outputPath, String extension) throws IOException {
+
         PDDocument document = PDDocument.load(new File(inputPath));
         PDFRenderer pdfRenderer = new PDFRenderer(document);
 
@@ -148,7 +153,7 @@ public class Worker {
             BufferedImage bim = pdfRenderer.renderImageWithDPI(
                     page, 300, ImageType.RGB);
             ImageIOUtil.writeImage(
-                    bim, String.format("src/output/pdf-%d.%s", page + 1, extension), 300);
+                    bim, String.format(outputPath + "_pdf.%s", extension), 300);
         }
         document.close();
     }
@@ -179,7 +184,7 @@ public class Worker {
                 System.out.println(text.trim());
 
                 try {
-                    PrintWriter pw = new PrintWriter(outputPath);
+                    PrintWriter pw = new PrintWriter(outputPath + ".txt");
                     pw.print(text);
                     pw.close();
                 } catch (FileNotFoundException e) { System.out.println("File not found, and not able to create a new one of this name!!"); }
@@ -202,7 +207,7 @@ public class Worker {
 
         String text = stripper.getText(doc);
 
-        PrintWriter pw = new PrintWriter(outputPath);
+        PrintWriter pw = new PrintWriter(outputPath + ".html");
 
         PDFDomTree p = new PDFDomTree();
         p.setEndPage(1);

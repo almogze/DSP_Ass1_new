@@ -35,7 +35,7 @@ public class Manager {
                 if (messages.get(0).body().equals("terminate")){
 
                     //
-                    awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Terminating");
+                    awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Manager Terminating");
 
 
                     shouldTerminate = true;

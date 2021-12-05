@@ -20,9 +20,8 @@ public class Local {
         //awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Worker.jar", "D:\\University\\2022\\DSPS\\DSP_Worker\\out\\artifacts\\DSP_Worker_jar\\DSP_Worker.jar");
 
 
-
         final String uniqueLocalId = "1";
-        final String uniquePathLocalApp =  AwsBundle.inputFolder + uniqueLocalId +"/";
+        final String uniquePathLocalApp =  AwsBundle.inputFolder + uniqueLocalId;
         boolean shouldTerminate = false;
 
         if(args.length == 3 || args.length == 4) {
@@ -60,11 +59,11 @@ public class Local {
         String managerResultQueueUrl = awsBundle.createQueue(awsBundle.resultsAppsQueueName);
 
         // Establishing new connection between the manager and the local
-        awsBundle.sendMessage(localManagerQueueUrl, uniqueLocalId + AwsBundle.Delimiter + "new connection");
+        awsBundle.sendMessage(localManagerQueueUrl, uniqueLocalId + AwsBundle.Delimiter + "new connection\n");
 
-        // Send New Task to manager
+        // Send New Task to manager. args[2] is the ratio of tasks per worker.
         awsBundle.sendMessage(managerRequestQueueUrl, uniqueLocalId + AwsBundle.Delimiter + args[2] + AwsBundle.Delimiter + uniquePathLocalApp + args[0]);
-        System.out.println("\nNew Task Message sent");
+        System.out.println("New Task Message sent to manager");
 
         boolean taskFinished = false;
         while(!taskFinished){
