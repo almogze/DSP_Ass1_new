@@ -37,7 +37,7 @@ public class Workers {
 
     // Creating new Workers for work
     public synchronized void createNewWorkersForTask(int count, int n){
-        int k = awsBundle.getAmountOfRunningInstances();    //Number of active workers
+        int k = awsBundle.getAmountOfRunningInstances() - 1;    //Number of active workers
         int m = count / n;                              // Number of required workers for new job
         int need_to_create = m - k;
         if (need_to_create < 19){

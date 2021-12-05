@@ -12,16 +12,16 @@ public class Local {
     public static void main(String[] args) {
 
 
-        // mvn exec:java -Dexec.mainClass="Local" -Dexec.args="input-sample-1.txt input-sample-1.txt 200 terminate"
+        // mvn exec:java -Dexec.mainClass="Local" -Dexec.args="input-sample-1.txt input-sample-1.txt 300 terminate"
 
-        // mvn exec:java -Dexec.mainClass="Local" -Dexec.args="input-sample-2.txt outPutHTML 30 terminate"
+        // mvn exec:java -Dexec.mainClass="Local" -Dexec.args="input-sample-1.txt outPutHTML 200 terminate"
 
         //awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Manager.jar", "D:\\University\\2022\\DSPS\\DSP_Manager\\out\\artifacts\\DSP_Manager_jar\\DSP_Manager.jar");
         //awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Worker.jar", "D:\\University\\2022\\DSPS\\DSP_Worker\\out\\artifacts\\DSP_Worker_jar\\DSP_Worker.jar");
 
 
         final String uniqueLocalId = "1";
-        final String uniquePathLocalApp =  AwsBundle.inputFolder + uniqueLocalId;
+        final String uniquePathLocalApp =  AwsBundle.inputFolder + uniqueLocalId + "/";
         boolean shouldTerminate = false;
 
         if(args.length == 3 || args.length == 4) {
@@ -59,7 +59,7 @@ public class Local {
         String managerResultQueueUrl = awsBundle.createQueue(awsBundle.resultsAppsQueueName);
 
         // Establishing new connection between the manager and the local
-        awsBundle.sendMessage(localManagerQueueUrl, uniqueLocalId + AwsBundle.Delimiter + "new connection\n");
+        awsBundle.sendMessage(localManagerQueueUrl, uniqueLocalId + AwsBundle.Delimiter + "new connection");
 
         // Send New Task to manager. args[2] is the ratio of tasks per worker.
         awsBundle.sendMessage(managerRequestQueueUrl, uniqueLocalId + AwsBundle.Delimiter + args[2] + AwsBundle.Delimiter + uniquePathLocalApp + args[0]);

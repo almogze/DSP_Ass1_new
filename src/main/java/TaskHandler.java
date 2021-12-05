@@ -49,6 +49,11 @@ public class TaskHandler implements Handler{
                 if (!messages_workers_result.isEmpty())
                 {
                     String [] result = messages_workers_result.get(0).body().split(AwsBundle.Delimiter);
+
+
+                    awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "got message:    " + result[2]);
+
+
                     if(Integer.parseInt(result[0]) == this.localID && Integer.parseInt(result[1]) == this.serialNum){
                         outputFile.write(messages_workers_result.get(0).body().split(AwsBundle.Delimiter)[2] + "\n");
                         numOfTasks--;
@@ -77,7 +82,6 @@ public class TaskHandler implements Handler{
     private int TaskMessage(String s3Details, int n){
 
         //
-        awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Creating Workers");
 
 
         String keyName = s3Details.split(AwsBundle.Delimiter)[2];
@@ -95,6 +99,7 @@ public class TaskHandler implements Handler{
                 count ++;
             }
             // Creating new workers for work
+            awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Creating Workers");
             workers.createNewWorkersForTask(count, n);
         }catch (Exception e){
             System.out.println(e);
