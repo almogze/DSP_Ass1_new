@@ -71,7 +71,7 @@ public class Worker {
         String inPath = line.substring(ind+1);
 
         String[] splitted = inPath.split("/");
-        String pdf_name = splitted[splitted.length-1];
+        String pdf_name = splitted[splitted.length-1].substring(0, splitted[splitted.length-1].length()-4);
 
         String downloadedFile = DownloadFile(inPath, pdf_name);
 
@@ -114,7 +114,7 @@ public class Worker {
                 System.out.println("No match for the command and our API!!");
                 break;
         }
-
+        System.out.println("Successfully downloaded and converted file.");
         return outputPath;
     }
 
