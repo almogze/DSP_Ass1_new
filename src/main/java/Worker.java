@@ -44,8 +44,8 @@ public class Worker {
                 String outputPath = null;
                 try {
                     outputPath = perform(line);
-                    awsBundle.putS3Object(AwsBundle.bucketName, outputPath, outputPath);
-                    String outPathInS3 = AwsBundle.bucketName + "\\" + outputPath;
+                    awsBundle.putS3Object(AwsBundle.bucketName, AwsBundle.outputFolder + "/" + outputPath, outputPath);
+                    String outPathInS3 = AwsBundle.bucketName + "\\" + AwsBundle.outputFolder + "/" + outputPath;
 
                     // Put a message in an SQS queue indicating the original URL of the PDF, the S3 url of the new
                     //image file, and the operation that was performed.
@@ -79,8 +79,8 @@ public class Worker {
             case "ToImage":
                 // (try) generating an image from the first page of a pdf.
                 try {
-                    outputPath = pdf_name;
-                    generateImageFromPDF(downloadedFile, outputPath, "jpg");
+                    generateImageFromPDF(downloadedFile, pdf_name, "jpg");
+                    outputPath = pdf_name + ".jpg";
                 } catch (IOException e) {
                     System.out.println("Problem during transforming to an image.");
                     e.printStackTrace();
@@ -91,8 +91,8 @@ public class Worker {
             case "ToHTML":
                 // (try) generating an html page from the first page of a pdf.
                 try {
-                    outputPath = pdf_name;
-                    generateHTMLFromPDF(downloadedFile, outputPath);
+                    generateHTMLFromPDF(downloadedFile, pdf_name);
+                    outputPath = pdf_name + ".html";
                 } catch (IOException e) {
                     System.out.println("Problem with generating html.");
                     e.printStackTrace();
@@ -102,8 +102,8 @@ public class Worker {
             case "ToText":
                 // (try) generating a .text file from the first page of a pdf.
                 try {
-                    outputPath = pdf_name;
-                    generateTextFromPDF(downloadedFile, outputPath);
+                    generateTextFromPDF(downloadedFile, pdf_name);
+                    outputPath = pdf_name + ".txt";
                 } catch (IOException e) {
                     System.out.println("Problem generating text file. Couldn't extract text.");
                     e.printStackTrace();
