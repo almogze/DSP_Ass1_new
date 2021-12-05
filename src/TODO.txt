@@ -1,0 +1,14 @@
+- Manager - Generate workers according to ratio given in arguments (n tasks per worker).
+
+- Manager - Terminate itself if gets a "terminate" message (already partially implemented).
+
+- Visible timeout or something like that (If a worker reads a message from a queue --> The amount of time it isn't
+    visible to others).
+
+- Worker - Loop over messages in queue --> Terminates when gets "terminate" message from manager (?).
+
+- Local - Generate output file, upload it to s3.
+
+- Local - Terminate Manager after getting a respons if 'shouldTerminate = true'.
+
+- Manager - Multi thread for multiple locals.
