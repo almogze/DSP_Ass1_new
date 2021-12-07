@@ -2,6 +2,8 @@ import software.amazon.awssdk.services.sqs.model.Message;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Manager {
     public static CountDownLatch countDownLatch;
@@ -20,7 +22,8 @@ public class Manager {
         awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Created Queues");
 
 
-        ThreadPerClient tpcLocals = new ThreadPerClient();
+        // ThreadPerClient tpcLocals = new ThreadPerClient();
+        ExecutorService threads = Executors.newFixedThreadPool(5);
         Workers workers = Workers.getInstance(awsBundle);
 
         //
@@ -45,7 +48,8 @@ public class Manager {
                     awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Creating Local Handler");
 
 
-                    tpcLocals.execute(new LocalHandler(awsBundle, workers, Integer.parseInt(messages.get(0).body().split(AwsBundle.Delimiter)[0])));
+                    // tpcLocals.execute(new LocalHandler(awsBundle, workers, Integer.parseInt(messages.get(0).body().split(AwsBundle.Delimiter)[0])));
+                    threads.execute(new LocalHandler(awsBundle, workers, Integer.parseInt(messages.get(0).body().split(AwsBundle.Delimiter)[0])));
                 }
                 awsBundle.deleteMessages(localManagerConnectionQueueUrl, messages);
             }
