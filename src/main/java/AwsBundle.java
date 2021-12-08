@@ -1,8 +1,9 @@
-import com.amazonaws.util.EC2MetadataUtils;
+// import com.amazonaws.util.EC2MetadataUtils;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.core.waiters.WaiterResponse;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.regions.internal.util.EC2MetadataUtils;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.*;
 import software.amazon.awssdk.services.ec2.model.Tag;
@@ -31,7 +32,7 @@ public class AwsBundle {
     public final String localManagerConnectionQueue = "locManConQueue";
     public final String debuggingQueueName = "debuggingQueue";
 
-    public static final String bucketName = "assignment1razalmog121212";
+    public static final String bucketName = "assignment1razalmog1111122222";
 
     public static final String inputFolder = "input-files";
     public static final String outputFolder = "output-files";

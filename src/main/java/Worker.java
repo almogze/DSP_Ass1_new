@@ -118,7 +118,7 @@ public class Worker {
         return outputPath;
     }
 
-    private static String DownloadFile(String filePath, String pdfName){
+    private static String DownloadFile(String filePath, String pdfName) throws IOException {
         String outPath = pdfName + ".pdf";
 
         System.out.println(filePath);
@@ -138,7 +138,9 @@ public class Worker {
             fos.close();
             channel.close();
         } catch(IOException e) {
+            System.out.println("problem downloading file");
             e.printStackTrace();
+            throw e;
         }
         return outPath;
     }
@@ -187,7 +189,10 @@ public class Worker {
                     PrintWriter pw = new PrintWriter(outputPath + ".txt");
                     pw.print(text);
                     pw.close();
-                } catch (FileNotFoundException e) { System.out.println("File not found, and not able to create a new one of this name!!"); }
+                } catch (FileNotFoundException e) {
+                    System.out.println("File not found, and not able to create a new one of this name!!");
+                    throw e;
+                }
             }
         }
     }
