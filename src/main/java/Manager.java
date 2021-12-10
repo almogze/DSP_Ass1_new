@@ -12,23 +12,11 @@ public class Manager {
         awsBundle.createQueue(awsBundle.requestsWorkersQueueName);
         awsBundle.createQueue(awsBundle.resultsWorkersQueueName);
 
-        //
-        awsBundle.createQueue(awsBundle.debuggingQueueName);
-
-
         String localManagerConnectionQueueUrl = awsBundle.getQueueUrl(awsBundle.localManagerConnectionQueue);
-
-        //
-        awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Created Queues");
-
 
         // ThreadPerClient tpcLocals = new ThreadPerClient();
         ExecutorService threads = Executors.newFixedThreadPool(5);
         Workers workers = Workers.getInstance(awsBundle);
-
-        //
-        awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Created Workers and TPC");
-
 
         boolean shouldTerminate = false;
 
@@ -36,19 +24,8 @@ public class Manager {
             List<Message> messages = awsBundle.receiveMessages(localManagerConnectionQueueUrl, 1);
             if (!messages.isEmpty()){
                 if (messages.get(0).body().equals("terminate")){
-
-                    //
-                    awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Manager Terminating");
-
-
                     shouldTerminate = true;
                 }else if(messages.get(0).body().split(AwsBundle.Delimiter)[1].equals("new connection")){
-
-                    //
-                    awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Creating Local Handler");
-
-
-                    // tpcLocals.execute(new LocalHandler(awsBundle, workers, Integer.parseInt(messages.get(0).body().split(AwsBundle.Delimiter)[0])));
                     threads.execute(new LocalHandler(awsBundle, workers, Integer.parseInt(messages.get(0).body().split(AwsBundle.Delimiter)[0])));
                 }
                 awsBundle.deleteMessages(localManagerConnectionQueueUrl, messages);

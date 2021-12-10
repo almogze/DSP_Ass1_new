@@ -30,7 +30,6 @@ public class AwsBundle {
     public final String requestsWorkersQueueName = "requestsWorkersQueue";
     public final String resultsWorkersQueueName = "resultsWorkersQueue";
     public final String localManagerConnectionQueue = "locManConQueue";
-    public final String debuggingQueueName = "debuggingQueue";
 
     public static final String bucketName = "assignment1razalmog1111122222";
 
@@ -123,7 +122,7 @@ public class AwsBundle {
 
         String nextToken = null;
 
-        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(1000).nextToken(nextToken).build();
+        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(500).nextToken(nextToken).build();
 
         DescribeInstancesResponse response = this.ec2.describeInstances(request);
 
@@ -155,7 +154,7 @@ public class AwsBundle {
         int counter = 0;
         String nextToken = null;
 
-        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(20).nextToken(nextToken).build();
+        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(500).nextToken(nextToken).build();
 
         DescribeInstancesResponse response = this.ec2.describeInstances(request);
 
@@ -208,7 +207,7 @@ public class AwsBundle {
 
         String nextToken = null;
 
-        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(20).nextToken(nextToken).build();
+        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(500).nextToken(nextToken).build();
 
         DescribeInstancesResponse response = this.ec2.describeInstances(request);
 
