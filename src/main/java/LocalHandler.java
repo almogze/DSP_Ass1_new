@@ -28,34 +28,14 @@ public class LocalHandler implements Handler {
      * - only finished when get termination message
      */
     public void run() {
-
-        //
-        awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Entered Local Handler");
-
-
         String localQueueUrl = awsBundle.getQueueUrl(awsBundle.requestsAppsQueueName);
         while(!this.gotResult)
         {
-
-            //
-            awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Entered Local Handler Loop");
-
-
             List<Message> messages_local = awsBundle.receiveMessages(localQueueUrl, 1);
             if (!messages_local.isEmpty())
             {
-
-                //
-                awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Local got new Message");
-
-
                 String [] result = messages_local.get(0).body().split(AwsBundle.Delimiter);
                 if(Integer.parseInt(result[0]) == this.localID){
-
-                    //
-                    awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Have the current local ID");
-
-
                     this.n = Integer.parseInt(result[1]);
                     // tpcWorkers.execute(new TaskHandler(this.awsBundle, this.workers, messages_local.get(0).body(), this.n, this.localID));
                     threads.execute(new TaskHandler(this.awsBundle, this.workers, messages_local.get(0).body(), this.n, this.localID));

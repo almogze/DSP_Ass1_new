@@ -28,32 +28,17 @@ public class TaskHandler implements Handler{
      * - send a message to local with type 'end task' and the keyname to the output file
      */
     public void run() {
-
-        //
-        awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Entered Task Handler");
-
-
         this.numOfTasks = TaskMessage(this.S3Details, this.n);
         String workerResultQueueUrl = awsBundle.getQueueUrl(awsBundle.resultsWorkersQueueName);
         String localResultQueueUrl = awsBundle.getQueueUrl(awsBundle.resultsAppsQueueName);
         String outputPath = "output" + this.serialNum + ".txt";
         try {
-
-            //
-            awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Task Handler start collecting urls from workers");
-
-
             PrintWriter outputFile = new PrintWriter(outputPath);
             while(this.numOfTasks > 0){
                 List<Message> messages_workers_result = awsBundle.receiveMessages(workerResultQueueUrl, 1);
                 if (!messages_workers_result.isEmpty())
                 {
                     String [] result = messages_workers_result.get(0).body().split(AwsBundle.Delimiter);
-
-
-                    awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "got message:    " + result[2]);
-
-
                     if(Integer.parseInt(result[0]) == this.localID && Integer.parseInt(result[1]) == this.serialNum){
                         outputFile.write(messages_workers_result.get(0).body().split(AwsBundle.Delimiter)[2] + "\n");
                         numOfTasks--;
@@ -61,7 +46,6 @@ public class TaskHandler implements Handler{
                     }
                 }
             }
-
             outputFile.close();
 
             awsBundle.putS3Object(AwsBundle.bucketName, outputPath, outputPath);
@@ -97,7 +81,6 @@ public class TaskHandler implements Handler{
                 count ++;
             }
             // Creating new workers for work
-            awsBundle.sendMessage(awsBundle.getQueueUrl(awsBundle.debuggingQueueName), "Creating Workers");
             workers.createNewWorkersForTask(count, n);
         }catch (Exception e){
             System.out.println(e);
