@@ -30,8 +30,9 @@ public class AwsBundle {
     public final String resultsWorkersQueueName = "resultsWorkersQueue";
     public final String localManagerConnectionQueue = "locManConQueue";
     public final String debuggingQueueName = "debuggingQueue";
+    public final String debuggingWorkersQueueName = "debuggingWorkersQueue";
 
-    public static final String bucketName = "assignment1razalmog121212";
+    public static final String bucketName = "assignment1razalmog1111122222";
 
     public static final String inputFolder = "input-files";
     public static final String outputFolder = "output-files";

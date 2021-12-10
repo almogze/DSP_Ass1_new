@@ -1,3 +1,4 @@
+import com.amazonaws.util.EC2MetadataUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -25,8 +26,9 @@ public class Worker {
     public static void main(String[] args){
         String RequestManagerQueueUrl = awsBundle.getQueueUrl(awsBundle.requestsWorkersQueueName);
         String ResultsManagerQueueUel = awsBundle.getQueueUrl(awsBundle.resultsWorkersQueueName);
-
+        String DebuggingWorkersQueue = awsBundle.createQueue(awsBundle.debuggingWorkersQueueName);
         boolean gotMessage = false;
+
 
         while(!gotMessage){
             List<Message> messages= awsBundle.receiveMessages(RequestManagerQueueUrl, 1);
@@ -52,10 +54,15 @@ public class Worker {
 
                     String outMessage =  localID + AwsBundle.Delimiter + serialNum + AwsBundle.Delimiter + command + ": " + outPathInS3 + " " + inPath;
                     awsBundle.sendMessage(ResultsManagerQueueUel, outMessage);
+
+                    awsBundle.sendMessage(DebuggingWorkersQueue, "Worker Number: " + EC2MetadataUtils.getInstanceId() + "       Message sent to Result Manager Queue");
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     String outMessage =  localID + AwsBundle.Delimiter + serialNum + AwsBundle.Delimiter + inPath + " " + e;
                     awsBundle.sendMessage(ResultsManagerQueueUel, outMessage);
+
+                    awsBundle.sendMessage(DebuggingWorkersQueue, "Worker Number: " + EC2MetadataUtils.getInstanceId() + "       Process Succeed: " + outputPath);
                 }
                 awsBundle.deleteMessages(RequestManagerQueueUrl, messages);
             }
@@ -118,7 +125,7 @@ public class Worker {
         return outputPath;
     }
 
-    private static String DownloadFile(String filePath, String pdfName){
+    private static String DownloadFile(String filePath, String pdfName) throws IOException {
         String outPath = pdfName + ".pdf";
 
         System.out.println(filePath);
@@ -138,7 +145,9 @@ public class Worker {
             fos.close();
             channel.close();
         } catch(IOException e) {
+            System.out.println("problem downloading file");
             e.printStackTrace();
+            throw e;
         }
         return outPath;
     }
@@ -187,7 +196,10 @@ public class Worker {
                     PrintWriter pw = new PrintWriter(outputPath + ".txt");
                     pw.print(text);
                     pw.close();
-                } catch (FileNotFoundException e) { System.out.println("File not found, and not able to create a new one of this name!!"); }
+                } catch (FileNotFoundException e) {
+                    System.out.println("File not found, and not able to create a new one of this name!!");
+                    throw e;
+                }
             }
         }
     }

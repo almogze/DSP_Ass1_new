@@ -12,15 +12,17 @@ public class Local {
     public static void main(String[] args) {
 
 
-        // mvn exec:java -Dexec.mainClass="Local" -Dexec.args="input-sample-1.txt input-sample-1.txt 300 terminate"
+        // mvn exec:java -Dexec.mainClass="Local" -Dexec.args="input-sample-1.txt outPutHTML 300 terminate"
 
-        // mvn exec:java -Dexec.mainClass="Local" -Dexec.args="input-sample-1.txt outPutHTML 200 terminate"
+        // mvn exec:java -Dexec.mainClass="Local" -Dexec.args="input-sample-2.txt outPutHTML 30 terminate"
 
-        //awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Manager.jar", "D:\\University\\2022\\DSPS\\DSP_Manager\\out\\artifacts\\DSP_Manager_jar\\DSP_Manager.jar");
-        //awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Worker.jar", "D:\\University\\2022\\DSPS\\DSP_Worker\\out\\artifacts\\DSP_Worker_jar\\DSP_Worker.jar");
+        //awsBundle.createBucketIfNotExists(AwsBundle.bucketName);
+        //awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Manager.jar", "D:\\University\\2022\\DSPS\\DSP_Ass1_new\\out\\artifacts\\DSP_Ass1_new_jar\\DSP_Manager.jar");
+        //awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Worker.jar", "D:\\University\\2022\\DSPS\\DSP_Ass1_new\\out\\artifacts\\DSP_Ass1_new_jar\\DSP_Worker.jar");
 
 
-        final String uniqueLocalId = "1";
+
+        final String uniqueLocalId = "2";
         final String uniquePathLocalApp =  AwsBundle.inputFolder + uniqueLocalId + "/";
         boolean shouldTerminate = false;
 

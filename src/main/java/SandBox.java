@@ -39,8 +39,20 @@ public class SandBox {
 
     public static void main(String[] args) throws IOException {
 
-        String outputPath = perform("ToImage\thttp://www.eszter.com/Haggadah.pdf");
+        String inputPath = "input-sample-2.txt";
+        int count = 0;
 
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputPath))) {
+            String line = reader.readLine();
+            while (line != null){
+                perform(line);
+                line = reader.readLine();
+                count ++;
+            }
+            // Creating new workers for work
+        }catch (Exception e){
+            System.out.println(e);
+        }
 
     }
 
@@ -52,7 +64,7 @@ public class SandBox {
         String inPath = line.substring(ind+1);
 
         String[] splitted = inPath.split("/");
-        String pdf_name = splitted[splitted.length-1].substring(0, splitted[splitted.length-1].length()-4);
+        String pdf_name = "output/" + splitted[splitted.length-1].substring(0, splitted[splitted.length-1].length()-4);
 
         String downloadedFile = DownloadFile(inPath, pdf_name);
 
@@ -60,8 +72,8 @@ public class SandBox {
             case "ToImage":
                 // (try) generating an image from the first page of a pdf.
                 try {
-                    outputPath = pdf_name;
-                    generateImageFromPDF(downloadedFile, outputPath, "jpg");
+                    generateImageFromPDF(downloadedFile, pdf_name, "jpg");
+                    outputPath = pdf_name + ".jpg";
                 } catch (IOException e) {
                     System.out.println("Problem during transforming to an image.");
                     e.printStackTrace();
@@ -72,8 +84,8 @@ public class SandBox {
             case "ToHTML":
                 // (try) generating an html page from the first page of a pdf.
                 try {
-                    outputPath = pdf_name;
-                    generateHTMLFromPDF(downloadedFile, outputPath);
+                    generateHTMLFromPDF(downloadedFile, pdf_name);
+                    outputPath = pdf_name + ".html";
                 } catch (IOException e) {
                     System.out.println("Problem with generating html.");
                     e.printStackTrace();
@@ -83,8 +95,8 @@ public class SandBox {
             case "ToText":
                 // (try) generating a .text file from the first page of a pdf.
                 try {
-                    outputPath = pdf_name;
-                    generateTextFromPDF(downloadedFile, outputPath);
+                    generateTextFromPDF(downloadedFile, pdf_name);
+                    outputPath = pdf_name + ".txt";
                 } catch (IOException e) {
                     System.out.println("Problem generating text file. Couldn't extract text.");
                     e.printStackTrace();
