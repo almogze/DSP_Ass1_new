@@ -24,7 +24,7 @@ public class Workers {
         this.shouldTerminate = false;
     }
 
-    private void createWorker()
+    private synchronized void createWorker()
     {
         String workerScript = "#! /bin/bash\n" +
                 // "sudo yum install -y java-1.8.0-openjdk\n" +
@@ -40,8 +40,16 @@ public class Workers {
         int k = awsBundle.getAmountOfRunningInstances() - 1;    //Number of active workers
         int m = count / n;                              // Number of required workers for new job
         int need_to_create = m - k;
-        if (need_to_create < 19){
-            for(int i =0; i < need_to_create; i++){
+        if (need_to_create + k + 1 < 19){
+            System.out.println("Creating " + need_to_create + " new instances");
+            for(int i = 0; i < need_to_create; i++){
+                createWorker();
+            }
+        }
+        else{
+            int need_to_create2 = 18 - k;
+            System.out.println("Creating " + need_to_create2 + " new instances");
+            for(int i = 0; i < need_to_create2; i++){
                 createWorker();
             }
         }

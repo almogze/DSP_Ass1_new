@@ -81,8 +81,6 @@ public class TaskHandler implements Handler{
      */
     private int TaskMessage(String s3Details, int n){
 
-        //
-
 
         String keyName = s3Details.split(AwsBundle.Delimiter)[2];
         String inputPath = "input" + this.serialNum + ".txt";

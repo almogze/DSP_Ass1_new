@@ -1,8 +1,9 @@
-import com.amazonaws.util.EC2MetadataUtils;
+// import com.amazonaws.util.EC2MetadataUtils;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.core.waiters.WaiterResponse;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.regions.internal.util.EC2MetadataUtils;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.*;
 import software.amazon.awssdk.services.ec2.model.Tag;
@@ -30,7 +31,6 @@ public class AwsBundle {
     public final String resultsWorkersQueueName = "resultsWorkersQueue";
     public final String localManagerConnectionQueue = "locManConQueue";
     public final String debuggingQueueName = "debuggingQueue";
-    public final String debuggingWorkersQueueName = "debuggingWorkersQueue";
 
     public static final String bucketName = "assignment1razalmog1111122222";
 
@@ -123,15 +123,19 @@ public class AwsBundle {
 
         String nextToken = null;
 
-        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(20).nextToken(nextToken).build();
+        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(1000).nextToken(nextToken).build();
 
         DescribeInstancesResponse response = this.ec2.describeInstances(request);
 
         for (Reservation reservation : response.reservations()) {
             for (Instance i : reservation.instances()) {
+                System.out.println("status:     " + i.state().name());
                 if (!i.state().name().equals(InstanceStateName.RUNNING))
                     continue;
                 for (Tag t : i.tags()) {
+                    if (t.key().equals("Name")){
+                        System.out.println("EC2 NAME:     " + t.value());
+                    }
                     if (t.key().equals("Name") && t.value().equals(name)) {
                         return true;
                     }
@@ -219,7 +223,6 @@ public class AwsBundle {
                 }
             }
         }
-
     }
 
 
