@@ -41,11 +41,12 @@ public class Worker {
                 String command = line.substring(0, ind);
                 String inPath = line.substring(ind + 1);
 
-                String outputPath = null;
+                String outputFilePath = null;
                 try {
-                    outputPath = perform(line);
-                    awsBundle.putS3Object(AwsBundle.bucketName, AwsBundle.outputFolder + "/" + outputPath, outputPath);
-                    String outPathInS3 = AwsBundle.bucketName + "\\" + AwsBundle.outputFolder + "/" + outputPath;
+                    outputFilePath = perform(line);
+                    String outPath = AwsBundle.outputFolder + localID + "/" + serialNum + "/" + outputFilePath;
+                    awsBundle.putS3Object(AwsBundle.bucketName, outPath, outputFilePath);
+                    String outPathInS3 = AwsBundle.bucketName + "\\" + outPath + "/" + outputFilePath;
 
                     // Put a message in an SQS queue indicating the original URL of the PDF, the S3 url of the new
                     //image file, and the operation that was performed.
@@ -60,7 +61,6 @@ public class Worker {
                 awsBundle.deleteMessages(RequestManagerQueueUrl, messages);
             }
         }
-
     }
 
     private static String perform(String line) throws IOException {
@@ -111,7 +111,7 @@ public class Worker {
                 }
                 break;
             default:
-                System.out.println("No match for the command and our API!!");
+                System.out.println("No match for the command in our API!!");
                 break;
         }
         System.out.println("Successfully downloaded and converted file.");
@@ -155,7 +155,7 @@ public class Worker {
             BufferedImage bim = pdfRenderer.renderImageWithDPI(
                     page, 300, ImageType.RGB);
             ImageIOUtil.writeImage(
-                    bim, String.format(outputPath + "_pdf.%s", extension), 300);
+                    bim, outputPath + String.format("_pdf.%s", extension), 300);
         }
         document.close();
     }

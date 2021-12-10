@@ -39,16 +39,205 @@ public class SandBox {
 
     public static void main(String[] args) throws IOException {
 
-        awsBundle.createBucketIfNotExists(AwsBundle.bucketName);
-        awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Manager.jar", "DSP_Manager.jar");
+
+        // awsBundle.createBucketIfNotExists(AwsBundle.bucketName);
+        // awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Manager.jar", "DSP_Manager.jar");
         // awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Worker.jar", "DSP_Worker.jar");
 
     }
+/*
+        int successCounter = 0;
+        int taskCounter = -1;
+        try (BufferedReader reader = new BufferedReader(new FileReader("input-sample-1.txt"))) {
+            String line = reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                try {
+                    taskCounter++;
+                    System.out.println("handling task number: " + taskCounter);
+                    perform(line);
+                    System.out.println("performed conversion number " + successCounter);
+                    successCounter++;
+
+                } catch (Exception e) {
+                    System.out.println("Exception caught: ");
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("Overall, handled " + taskCounter + " files.");
+            System.out.println("Overall, succeeded " + successCounter + " times.");
+        }
 
 
 
+        private static String perform (String line) throws IOException {
+            String outputPath = "File Not processed!";
+
+            int ind = line.indexOf("\t");
+            String command = line.substring(0, ind);
+            String inPath = line.substring(ind + 1);
+
+            String[] splitted = inPath.split("/");
+            String pdf_name = splitted[splitted.length - 1].substring(0, splitted[splitted.length - 1].length() - 4);
 
 
+            // Erase this ONE line after this - for testing purposes!
+            String pdf_name1 = "input_pdfs/" + pdf_name;
+
+
+            String downloadedFile = DownloadFile(inPath, pdf_name1);
+
+
+            // Erase this ONE line after this - for testing purposes!
+            pdf_name = "output_files/" + pdf_name;
+
+
+            switch (command) {
+                case "ToImage":
+                    // (try) generating an image from the first page of a pdf.
+                    try {
+                        generateImageFromPDF(downloadedFile, pdf_name, "jpg");
+                        outputPath = pdf_name + ".jpg";
+                    } catch (IOException e) {
+                        System.out.println("Problem during transforming to an image.");
+                        e.printStackTrace();
+                        throw e;
+                        //System.out.println("IOError in generating image process. In the near future - Change this catch, so the line written to the final file is: \"\"");
+                    }
+                    break;
+                case "ToHTML":
+                    // (try) generating an html page from the first page of a pdf.
+                    try {
+                        generateHTMLFromPDF(downloadedFile, pdf_name);
+                        outputPath = pdf_name + ".html";
+                    } catch (IOException e) {
+                        System.out.println("Problem with generating html.");
+                        e.printStackTrace();
+                        throw e;
+                    }
+                    break;
+                case "ToText":
+                    // (try) generating a .text file from the first page of a pdf.
+                    try {
+                        generateTextFromPDF(downloadedFile, pdf_name);
+                        outputPath = pdf_name + ".txt";
+                    } catch (IOException e) {
+                        System.out.println("Problem generating text file. Couldn't extract text.");
+                        e.printStackTrace();
+                        throw e;
+                    }
+                    break;
+                default:
+                    System.out.println("No match for the command and our API!!");
+                    break;
+            }
+            System.out.println("Successfully downloaded and converted file.");
+            return outputPath;
+        }
+
+        private static String DownloadFile (String filePath, String pdfName) throws IOException {
+            String outPath = pdfName + ".pdf";
+
+            // System.out.println(filePath);
+
+            try {
+                //String fileUrl = filePath;
+                URL url = new URL(filePath);
+                // create an input stream to the file InputStream
+                InputStream inputStream = url.openStream();
+                // create a channel with this input stream
+                ReadableByteChannel channel = Channels.newChannel(url.openStream());
+                // create an output stream
+                FileOutputStream fos = new FileOutputStream(new File(outPath));
+                // get output channel, read from input channel and write to it
+                fos.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
+                // close resources
+                fos.close();
+                channel.close();
+            } catch (IOException e) {
+                System.out.println("problem downloading file");
+                e.printStackTrace();
+                throw e;
+            }
+            return outPath;
+        }
+
+
+    private static void generateImageFromPDF(String inputPath, String outputPath, String extension) throws IOException {
+
+        PDDocument document = PDDocument.load(new File(inputPath));
+        PDFRenderer pdfRenderer = new PDFRenderer(document);
+
+        for (int page = 0; page < 1; ++page) {
+            BufferedImage bim = pdfRenderer.renderImageWithDPI(
+                    page, 300, ImageType.RGB);
+            ImageIOUtil.writeImage(
+                    bim, outputPath + String.format("_pdf.%s", extension), 300);
+        }
+        document.close();
+    }
+
+
+        private static void generateTextFromPDF (String inputPath, String outputPath) throws IOException {
+            if (inputPath == null) {
+                System.out.println("No input file given!");
+                return;
+            }
+            try (PDDocument document = PDDocument.load(new File(inputPath))) {
+                AccessPermission ap = document.getCurrentAccessPermission();
+                if (!ap.canExtractContent())
+                    throw new IOException("You don't have permissions to extract data from this file!!");
+
+                PDFTextStripper stripper = new PDFTextStripper();
+                stripper.setSortByPosition(true);
+
+                for (int p = 1; p < 2; ++p) {
+
+                    // Set the page interval to extract. If you don't, then all pages would be extracted.
+                    stripper.setStartPage(p);
+                    stripper.setEndPage(p);
+
+                    // let the magic happen
+                    String text = stripper.getText(document);
+
+                    System.out.println(text.trim());
+
+                    try {
+                        PrintWriter pw = new PrintWriter(outputPath + ".txt");
+                        pw.print(text);
+                        pw.close();
+                    } catch (FileNotFoundException e) {
+                        System.out.println("File not found, and not able to create a new one of this name!!");
+                        throw e;
+                    }
+                }
+            }
+        }
+
+        private static void generateHTMLFromPDF (String inputPath, String outputPath) throws IOException {
+            PDDocument doc = PDDocument.load(new File(inputPath));
+
+            AccessPermission ap = doc.getCurrentAccessPermission();
+            if (!ap.canExtractContent())
+                throw new IOException("You don't have permissions to extract data from this file!!");
+
+            PDFTextStripper stripper = new PDFTextStripper();
+            stripper.setSortByPosition(true);
+
+            stripper.setStartPage(1);
+            stripper.setEndPage(1);
+
+            String text = stripper.getText(doc);
+
+            PrintWriter pw = new PrintWriter(outputPath + ".html");
+
+            PDFDomTree p = new PDFDomTree();
+            p.setEndPage(1);
+            p.writeText(doc, pw);
+
+            doc.close();
+        }
+
+*/
 
         // awsBundle.createBucketIfNotExists(AwsBundle.bucketName);
 
@@ -71,13 +260,6 @@ public class SandBox {
 
         awsBundle.createEC2Instance("First_of_many3", AwsBundle.ami, userData);
 */
-
-
-
-
-
-
-
 
 
         // awsBundle.createEC2Instance("Leader", AwsBundle.ami, "");
@@ -114,21 +296,6 @@ public class SandBox {
         // awsBundle.deleteBucketObjects(AwsBundle.bucketName, "HelloWorldProj.jar");
 
         // awsBundle.terminateEC2("i-039c0fd7d7488d72e");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         //awsBundle.deleteSQSQueue("firstQueueOfMany");
@@ -202,44 +369,6 @@ public class SandBox {
 
 
          */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         //AwsBundle.createBucketIfNotExists(AwsBundle.bucketName);
@@ -332,7 +461,7 @@ public class SandBox {
         awsBundle.createInstance("Worker2", AwsBundle.ami, workerScript2);
 */
 
-}
+    }
 
 
 
