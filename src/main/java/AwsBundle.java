@@ -122,7 +122,7 @@ public class AwsBundle {
 
         String nextToken = null;
 
-        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(1000).nextToken(nextToken).build();
+        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(500).nextToken(nextToken).build();
 
         DescribeInstancesResponse response = this.ec2.describeInstances(request);
 
@@ -150,7 +150,7 @@ public class AwsBundle {
         int counter = 0;
         String nextToken = null;
 
-        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(20).nextToken(nextToken).build();
+        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(500).nextToken(nextToken).build();
 
         DescribeInstancesResponse response = this.ec2.describeInstances(request);
 
@@ -203,7 +203,7 @@ public class AwsBundle {
 
         String nextToken = null;
 
-        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(20).nextToken(nextToken).build();
+        DescribeInstancesRequest request = DescribeInstancesRequest.builder().maxResults(500).nextToken(nextToken).build();
 
         DescribeInstancesResponse response = this.ec2.describeInstances(request);
 
