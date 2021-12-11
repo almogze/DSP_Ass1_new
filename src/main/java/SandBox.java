@@ -36,20 +36,25 @@ import java.util.List;
 public class SandBox {
 
     final static AwsBundle awsBundle = AwsBundle.getInstance();
+    static int counter = 0;
 
     public static void main(String[] args) throws IOException {
 
-        // mvn exec:java -Dexec.mainClass="Local" -Dexec.args="input-sample-1.txt outPutHTML 200 terminate"
+        // mvn exec:java -Dexec.mainClass="SandBox" -Dexec.args="input-sample-1.txt outPutHTML 200 terminate"
 
         //awsBundle.createEC2Instance("almog" , AwsBundle.ami, "");
 
-        boolean check = awsBundle.checkIfInstanceExist("almog");
-        System.out.println(check);
-        if(!check)
-            awsBundle.createEC2Instance("almog" , AwsBundle.ami, "");
+        //awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Manager.jar", "D:\\University\\2022\\DSPS\\DSP_Ass1_new\\out\\artifacts\\DSP_Ass1_new_jar\\DSP_Manager.jar");
+        awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Worker.jar", "D:\\University\\2022\\DSPS\\DSP_Ass1_new\\out\\artifacts\\DSP_Ass1_new_jar\\DSP_Worker.jar");
 
+        // boolean check = awsBundle.checkIfInstanceExist("almog");
+        // System.out.println(check);
+        // if(!check)
+        //    awsBundle.createEC2Instance("almog" , AwsBundle.ami, "");
     }
+
 }
+
 
 
 

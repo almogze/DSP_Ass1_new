@@ -14,7 +14,6 @@ public class Manager {
 
         String localManagerConnectionQueueUrl = awsBundle.getQueueUrl(awsBundle.localManagerConnectionQueue);
 
-        // ThreadPerClient tpcLocals = new ThreadPerClient();
         ExecutorService threads = Executors.newFixedThreadPool(5);
         Workers workers = Workers.getInstance(awsBundle);
 

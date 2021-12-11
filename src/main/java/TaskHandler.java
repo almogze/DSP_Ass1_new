@@ -86,6 +86,7 @@ public class TaskHandler implements Handler{
             System.out.println(e);
         }
 
+
         workers.increaseNumberOfRunningTasks();
         return count;
     }

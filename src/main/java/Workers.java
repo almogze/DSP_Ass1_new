@@ -46,7 +46,7 @@ public class Workers {
                 createWorker();
             }
         }
-        else{
+        else if(need_to_create > 0){
             int need_to_create2 = 18 - k;
             System.out.println("Creating " + need_to_create2 + " new instances");
             for(int i = 0; i < need_to_create2; i++){
