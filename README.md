@@ -4,7 +4,7 @@ id's: 205789001 - 313292120
 Assignment 1 of the course Distributed Systems programming course given by Meni Adler, Semester 1 2022 (Starts at Oct' 21).
 
 *all instances in our program are: ami-00e95a9222311e8ed  - micro
-which is a linux EC2 and support java sdk.*
+which is a linux EC2 that support java sdk.*
 
 Activation guide:
 The whole application is started from the Local class. By running it with the proper arguments, the functionality of this code is performed.
