@@ -1,5 +1,5 @@
 # Project Manual 
-id's: 205789001 - 313292120
+Id's: 205789001 - 313292120
 
 Assignment 1 of the course Distributed Systems programming course given by Meni Adler, Semester 1 2022 (Starts at Oct' 21).
 
