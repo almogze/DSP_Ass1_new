@@ -10,7 +10,7 @@ Activation guide:
 The whole application is started from the Local class. By running it with the proper arguments, the functionality of this code is performed.
 The task is execute by typing:  java -cp yourjar.jar Local inputFileName outputFileName n [terminate]
 
-This will cause the class Main Local to start operate with the following arguments inputFileName outputFileName n [terminate] (where [terminate] is optional).
+This will cause the class Main in Local to start operate with the following arguments inputFileName outputFileName n [terminate] (where [terminate] is optional).
 
 There is a secound option to run the program from the code itself by writing: 
 mvn exec:java -Dexec.mainClass="Local" -Dexec.args="<input file> <output file> <ratio> <terminate>"
