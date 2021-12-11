@@ -65,7 +65,6 @@ public class TaskHandler implements Handler{
      */
     private int TaskMessage(String s3Details, int n){
 
-
         String keyName = s3Details.split(AwsBundle.Delimiter)[2];
         String inputPath = "input" + this.serialNum + ".txt";
         int count = 0;      // Counter of the amount of urls in the file
@@ -80,13 +79,12 @@ public class TaskHandler implements Handler{
                 line = reader.readLine();
                 count ++;
             }
-            // Creating new workers for work
-            workers.createNewWorkersForTask(count, n);
         }catch (Exception e){
             System.out.println(e);
         }
 
-
+        // Creating new workers for work
+        workers.createNewWorkersForTask(count, n);
         workers.increaseNumberOfRunningTasks();
         return count;
     }

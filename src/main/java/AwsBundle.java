@@ -1,4 +1,3 @@
-// import com.amazonaws.util.EC2MetadataUtils;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.core.waiters.WaiterResponse;
@@ -31,7 +30,7 @@ public class AwsBundle {
     public final String resultsWorkersQueueName = "resultsWorkersQueue";
     public final String localManagerConnectionQueue = "locManConQueue";
 
-    public static final String bucketName = "assignment1razalmog121212";
+    public static final String bucketName = "assignment1razalmog1111122222";
 
     public static final String inputFolder = "input-files";
     public static final String outputFolder = "output-files";
@@ -128,13 +127,9 @@ public class AwsBundle {
 
         for (Reservation reservation : response.reservations()) {
             for (Instance i : reservation.instances()) {
-                System.out.println("status:     " + i.state().name());
                 if (!i.state().name().equals(InstanceStateName.RUNNING))
                     continue;
                 for (Tag t : i.tags()) {
-                    if (t.key().equals("Name")){
-                        System.out.println("EC2 NAME:     " + t.value());
-                    }
                     if (t.key().equals("Name") && t.value().equals(name)) {
                         return true;
                     }
@@ -244,7 +239,6 @@ public class AwsBundle {
             HeadBucketRequest bucketRequestWait = HeadBucketRequest.builder()
                     .bucket(bucketName)
                     .build();
-
 
             // Wait until the bucket is created and print out the response
             WaiterResponse<HeadBucketResponse> waiterResponse = s3Waiter.waitUntilBucketExists(bucketRequestWait);

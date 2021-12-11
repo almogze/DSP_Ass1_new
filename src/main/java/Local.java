@@ -11,14 +11,7 @@ public class Local {
 
     public static void main(String[] args) {
 
-
-        // mvn exec:java -Dexec.mainClass="Local" -Dexec.args="input-sample-1.txt outPutHTML 200 terminate"
-
-        //awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Manager.jar", "D:\\University\\2022\\DSPS\\DSP_Manager\\out\\artifacts\\DSP_Manager_jar\\DSP_Manager.jar");
-        //awsBundle.putS3Object(AwsBundle.bucketName, "ocr-assignment1/JarFiles/DSP_Worker.jar", "D:\\University\\2022\\DSPS\\DSP_Worker\\out\\artifacts\\DSP_Worker_jar\\DSP_Worker.jar");
-
-
-        final String uniqueLocalId = "2";
+        final String uniqueLocalId = "1";
         final String uniquePathLocalApp =  AwsBundle.inputFolder + uniqueLocalId + "/";
         boolean shouldTerminate = false;
 
@@ -39,7 +32,6 @@ public class Local {
 
         if (!isLegalFileSize(args[0]))
         {
-            // System.out.println(args[0]);
             System.out.println("Input file is over maximal size (10MB)");
             System.exit(1);
         }
@@ -86,12 +78,9 @@ public class Local {
                 }
             }
         }
-
         if(shouldTerminate) {
             awsBundle.sendMessage(localManagerQueueUrl, "terminate");
         }
-
-
     }
 
     /**

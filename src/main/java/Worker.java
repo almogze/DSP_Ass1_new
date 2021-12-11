@@ -1,4 +1,3 @@
-import com.amazonaws.util.EC2MetadataUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -26,8 +25,8 @@ public class Worker {
     public static void main(String[] args){
         String RequestManagerQueueUrl = awsBundle.getQueueUrl(awsBundle.requestsWorkersQueueName);
         String ResultsManagerQueueUel = awsBundle.getQueueUrl(awsBundle.resultsWorkersQueueName);
-        boolean gotMessage = false;
 
+        boolean gotMessage = false;
 
         while(!gotMessage){
             List<Message> messages= awsBundle.receiveMessages(RequestManagerQueueUrl, 1);
@@ -86,7 +85,6 @@ public class Worker {
                     System.out.println("Problem during transforming to an image.");
                     e.printStackTrace();
                     throw e;
-                    //System.out.println("IOError in generating image process. In the near future - Change this catch, so the line written to the final file is: \"\"");
                 }
                 break;
             case "ToHTML":
