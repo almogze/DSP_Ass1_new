@@ -21,6 +21,8 @@ We start with a quick explanation of the roles of the different classes in the a
 Notice: The use of the visibility timeout used in order not to miss a message, and not perform a message twice.
 
 
+![C:\Users\almog\Desktop\אלמוג\שנה ד\סמסטר ז\מערכות מבוזרות 1\Local - Manager - Worker configuration.jpg]
+
 The whole application is started from the Local class. By running it with the proper arguments, the functionality of this code is performed.
 The task is execute by typing:  java -cp yourjar.jar Local inputFileName outputFileName n [terminate]
 
