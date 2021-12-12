@@ -1,12 +1,12 @@
 # Project Manual 
 Id's: 205789001 - 313292120
 
-Assignment 1 of the course Distributed Systems programming course given by Meni Adler, Semester 1 2022 (Starts at Oct' 21).
+## Assignment 1 of the course Distributed Systems programming course given by Meni Adler, Semester 1 2022 (Starts at Oct' 21).
 
 *all instances in our program are: ami-00e95a9222311e8ed  - micro
 which is a linux EC2 that support java sdk.*
 
-Activation guide:
+## Activation guide:
 
 We start with a quick explanation of the roles of the different classes in the assingment:
   - Local: Starts the whole application, specifically, starts the Manager and uploads the input file to S3 memory.
